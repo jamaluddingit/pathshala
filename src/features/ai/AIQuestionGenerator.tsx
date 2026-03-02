@@ -18,15 +18,24 @@ export const AIQuestionGenerator: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const generateQuestions = async () => {
     if (!topic) return;
     
     setIsLoading(true);
     setQuestions([]);
+    setError(null);
     
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
+        setError("এপিআই কী (API Key) পাওয়া যায়নি। দয়া করে এনভায়রনমেন্ট ভেরিয়েবল চেক করুন।");
+        setIsLoading(false);
+        return;
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Generate exactly ${count} multiple choice questions about "${topic}" in Bengali. 
@@ -52,13 +61,20 @@ export const AIQuestionGenerator: React.FC = () => {
       });
 
       if (response.text) {
-        const result = JSON.parse(response.text);
+        // Clean potential markdown blocks if present
+        const cleanText = response.text.replace(/```json|```/g, '').trim();
+        const result = JSON.parse(cleanText);
         if (Array.isArray(result)) {
           setQuestions(result);
+        } else {
+          setError("এআই থেকে সঠিক ফরম্যাটে উত্তর পাওয়া যায়নি।");
         }
+      } else {
+        setError("এআই কোনো উত্তর প্রদান করেনি।");
       }
-    } catch (error) {
-      console.error("AI Generation Error:", error);
+    } catch (err: any) {
+      console.error("AI Generation Error:", err);
+      setError(err.message || "প্রশ্ন তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
     } finally {
       setIsLoading(false);
     }
@@ -134,6 +150,11 @@ export const AIQuestionGenerator: React.FC = () => {
                 {isLoading ? <Loader2 className="animate-spin" size={18} /> : <Sparkles size={18} />}
                 প্রশ্ন তৈরি করুন
               </Button>
+              {error && (
+                <p className="mt-2 text-xs text-red-500 bg-red-50 p-2 rounded-lg border border-red-100">
+                  {error}
+                </p>
+              )}
             </div>
           </Card>
         </div>
