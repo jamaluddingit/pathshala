@@ -21,15 +21,24 @@ export const AIQuestionGenerator: React.FC = () => {
 
   const generateQuestions = async () => {
     if (!topic) return;
+    
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
+      alert("এপিআই কী (API Key) পাওয়া যায়নি। দয়া করে সেটিংস চেক করুন।");
+      return;
+    }
+
     setIsLoading(true);
+    setQuestions([]);
+    
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+      const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
-        contents: `Generate ${count} multiple choice questions about "${topic}" in Bengali. 
+        contents: `Generate exactly ${count} multiple choice questions about "${topic}" in Bengali. 
         Difficulty level: ${difficulty}. 
-        Provide the output in JSON format with the following structure:
-        Array of objects, each having: "question", "options" (array of 4 strings), "correctAnswer" (the exact string from options), and "explanation".`,
+        The output MUST be a valid JSON array of objects.
+        Each object MUST have: "question", "options" (array of exactly 4 strings), "correctAnswer" (the exact string from options), and "explanation".`,
         config: {
           responseMimeType: "application/json",
           responseSchema: {
@@ -48,11 +57,19 @@ export const AIQuestionGenerator: React.FC = () => {
         },
       });
 
-      const result = JSON.parse(response.text || '[]');
-      setQuestions(result);
+      if (!response.text) {
+        throw new Error("No response text received from AI");
+      }
+
+      const result = JSON.parse(response.text);
+      if (Array.isArray(result)) {
+        setQuestions(result);
+      } else {
+        throw new Error("Response is not an array");
+      }
     } catch (error) {
-      console.error("Error generating questions:", error);
-      alert("প্রশ্ন তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      console.error("AI Generation Error:", error);
+      alert("প্রশ্ন তৈরি করতে সমস্যা হয়েছে। আপনার এপিআই কী এবং ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
     } finally {
       setIsLoading(false);
     }
