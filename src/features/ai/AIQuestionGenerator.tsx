@@ -22,17 +22,11 @@ export const AIQuestionGenerator: React.FC = () => {
   const generateQuestions = async () => {
     if (!topic) return;
     
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
-      alert("এপিআই কী (API Key) পাওয়া যায়নি। দয়া করে সেটিংস চেক করুন।");
-      return;
-    }
-
     setIsLoading(true);
     setQuestions([]);
     
     try {
-      const ai = new GoogleGenAI({ apiKey });
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",
         contents: `Generate exactly ${count} multiple choice questions about "${topic}" in Bengali. 
@@ -57,19 +51,14 @@ export const AIQuestionGenerator: React.FC = () => {
         },
       });
 
-      if (!response.text) {
-        throw new Error("No response text received from AI");
-      }
-
-      const result = JSON.parse(response.text);
-      if (Array.isArray(result)) {
-        setQuestions(result);
-      } else {
-        throw new Error("Response is not an array");
+      if (response.text) {
+        const result = JSON.parse(response.text);
+        if (Array.isArray(result)) {
+          setQuestions(result);
+        }
       }
     } catch (error) {
       console.error("AI Generation Error:", error);
-      alert("প্রশ্ন তৈরি করতে সমস্যা হয়েছে। আপনার এপিআই কী এবং ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
     } finally {
       setIsLoading(false);
     }
