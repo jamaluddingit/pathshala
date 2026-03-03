@@ -153,7 +153,7 @@ export const AIQuestionGenerator: React.FC = () => {
                 isLoading={isLoading}
                 disabled={!topic}
               >
-                {isLoading ? <Loader2 className="animate-spin" size={18} /> : <Sparkles size={18} />}
+                {!isLoading && <Sparkles size={18} />}
                 প্রশ্ন তৈরি করুন
               </Button>
               {error && (
