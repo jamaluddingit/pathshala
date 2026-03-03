@@ -16,9 +16,10 @@ import { Button } from '../../components/ui/Button';
 
 interface LandingPageProps {
   onGetStarted: () => void;
+  onFeatureClick: (tab: string) => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onFeatureClick }) => {
   return (
     <div className="min-h-screen bg-white text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
       {/* Navigation */}
@@ -133,38 +134,45 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               {
                 icon: <Sparkles className="text-emerald-600" />,
                 title: "এআই প্রশ্ন জেনারেটর",
-                desc: "মুহূর্তেই যেকোনো বিষয়ের ওপর মানসম্মত প্রশ্ন তৈরি করুন এআই প্রযুক্তির মাধ্যমে।"
+                desc: "মুহূর্তেই যেকোনো বিষয়ের ওপর মানসম্মত প্রশ্ন তৈরি করুন এআই প্রযুক্তির মাধ্যমে।",
+                tab: "ai-gen"
               },
               {
                 icon: <Layout className="text-blue-600" />,
                 title: "কোচিং ম্যানেজমেন্ট",
-                desc: "শিক্ষার্থী ভর্তি, উপস্থিতি এবং ফি ম্যানেজমেন্ট এখন হবে এক ক্লিকেই।"
+                desc: "শিক্ষার্থী ভর্তি, উপস্থিতি এবং ফি ম্যানেজমেন্ট এখন হবে এক ক্লিকেই।",
+                tab: "coaching"
               },
               {
                 icon: <BookOpen className="text-purple-600" />,
                 title: "নোট স্টোর",
-                desc: "মানসম্মত হ্যান্ডনোট কেনা-বেচার জন্য দেশের সবচেয়ে বড় ডিজিটাল প্ল্যাটফর্ম।"
+                desc: "মানসম্মত হ্যান্ডনোট কেনা-বেচার জন্য দেশের সবচেয়ে বড় ডিজিটাল প্ল্যাটফর্ম।",
+                tab: "notes"
               },
               {
                 icon: <Globe className="text-orange-600" />,
                 title: "অনলাইন এক্সাম পোর্টাল",
-                desc: "সারা দেশের শিক্ষার্থীদের সাথে প্রতিযোগিতায় অংশ নেওয়ার সুযোগ।"
+                desc: "সারা দেশের শিক্ষার্থীদের সাথে প্রতিযোগিতায় অংশ নেওয়ার সুযোগ।",
+                tab: "exams"
               },
               {
                 icon: <ShieldCheck className="text-red-600" />,
                 title: "নিরাপদ ডাটা",
-                desc: "আপনার প্রতিষ্ঠানের সকল তথ্য থাকবে আমাদের কাছে শতভাগ সুরক্ষিত।"
+                desc: "আপনার প্রতিষ্ঠানের সকল তথ্য থাকবে আমাদের কাছে শতভাগ সুরক্ষিত।",
+                tab: "dashboard"
               },
               {
                 icon: <Users className="text-indigo-600" />,
                 title: "অভিভাবক প্যানেল",
-                desc: "সন্তানের অগ্রগতির আপডেট সরাসরি অভিভাবকদের কাছে পৌঁছে দেওয়ার সুবিধা।"
+                desc: "সন্তানের অগ্রগতির আপডেট সরাসরি অভিভাবকদের কাছে পৌঁছে দেওয়ার সুবিধা।",
+                tab: "students"
               }
             ].map((feature, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all"
+                onClick={() => onFeatureClick(feature.tab)}
+                className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all cursor-pointer"
               >
                 <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-6">
                   {feature.icon}
