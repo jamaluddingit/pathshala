@@ -28,7 +28,8 @@ export const AIQuestionGenerator: React.FC = () => {
     setError(null);
     
     try {
-      const manualApiKey = localStorage.getItem('dapathshala_gemini_key') || '';
+      const storedKey = localStorage.getItem('dapathshala_gemini_key') || '';
+      const manualApiKey = storedKey.trim();
       const apiKey = (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY')
         ? process.env.GEMINI_API_KEY
         : manualApiKey;
@@ -41,7 +42,7 @@ export const AIQuestionGenerator: React.FC = () => {
 
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-flash-latest",
         contents: `Generate exactly ${count} multiple choice questions about "${topic}" in Bengali. 
         Difficulty level: ${difficulty}. 
         The output MUST be a valid JSON array of objects.
