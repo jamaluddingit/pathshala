@@ -13,11 +13,17 @@ import { NoteStore } from './features/notes/NoteStore';
 import { CandidatePortal } from './features/candidates/CandidatePortal';
 import { AIQuestionGenerator } from './features/ai/AIQuestionGenerator';
 import { Settings } from './features/settings/Settings';
+import { LandingPage } from './features/landing/LandingPage';
 import { AnimatePresence, motion } from 'motion/react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showLanding, setShowLanding] = useState(true);
+
+  if (showLanding) {
+    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+  }
 
   const renderContent = () => {
     switch (activeTab) {
