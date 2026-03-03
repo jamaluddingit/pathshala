@@ -12,6 +12,7 @@ import { ExamPortal } from './features/exams/ExamPortal';
 import { NoteStore } from './features/notes/NoteStore';
 import { CandidatePortal } from './features/candidates/CandidatePortal';
 import { AIQuestionGenerator } from './features/ai/AIQuestionGenerator';
+import { Settings } from './features/settings/Settings';
 import { AnimatePresence, motion } from 'motion/react';
 
 export default function App() {
@@ -33,6 +34,8 @@ export default function App() {
         return <NoteStore />;
       case 'candidates':
         return <CandidatePortal />;
+      case 'settings':
+        return <Settings />;
       default:
         return <StudentDashboard />;
     }
