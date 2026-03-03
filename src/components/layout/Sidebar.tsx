@@ -26,6 +26,7 @@ const navItems = [
   { id: 'ai-gen', label: 'এআই প্রশ্ন তৈরি', icon: Sparkles },
   { id: 'notes', label: 'নোট বিক্রি', icon: ShoppingBag },
   { id: 'candidates', label: 'প্রার্থী', icon: Vote },
+  { id: 'settings', label: 'সেটিংস', icon: Settings },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isOpen }) => {
@@ -58,10 +59,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, isOpe
         </div>
 
         <div className="mt-auto space-y-1 pt-6 border-t border-slate-100">
-          <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
-            <Settings size={20} />
-            সেটিংস
-          </button>
           <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900">
             <HelpCircle size={20} />
             সহায়তা কেন্দ্র
