@@ -11,7 +11,8 @@ export const Settings: React.FC = () => {
   const [message, setMessage] = useState('');
 
   const validateKey = async (key: string) => {
-    if (!key) {
+    const trimmedKey = key.trim();
+    if (!trimmedKey) {
       setValidationStatus('idle');
       setMessage('');
       return;
@@ -19,25 +20,34 @@ export const Settings: React.FC = () => {
 
     setIsValidating(true);
     try {
-      const genAI = new GoogleGenAI({ apiKey: key });
-      // A simple prompt to check if the key works
+      const genAI = new GoogleGenAI({ apiKey: trimmedKey });
+      // Use gemini-flash-latest for broader compatibility during validation
       await genAI.models.generateContent({
-        model: "gemini-1.5-flash",
+        model: "gemini-flash-latest",
         contents: "Hi",
       });
       setValidationStatus('valid');
       setMessage('আপনার এপিআই কী সঠিকভাবে কাজ করছে।');
-    } catch (error) {
+      localStorage.setItem('dapathshala_gemini_key', trimmedKey);
+    } catch (error: any) {
       console.error("API Key validation failed:", error);
       setValidationStatus('invalid');
-      setMessage('এপিআই কী অবৈধ বা কাজ করছে না। দয়া করে সঠিক কী প্রদান করুন।');
+      
+      // Try to provide a more specific error message
+      const errorMsg = error?.message || '';
+      if (errorMsg.includes('API_KEY_INVALID') || errorMsg.includes('invalid') || errorMsg.includes('not found')) {
+        setMessage('এপিআই কী অবৈধ। দয়া করে গুগল এআই স্টুডিও থেকে সঠিক কী কপি করে আনুন।');
+      } else if (errorMsg.includes('quota') || errorMsg.includes('limit')) {
+        setMessage('আপনার এপিআই কী-এর কোটা শেষ হয়ে গেছে বা লিমিট অতিক্রম করেছে।');
+      } else {
+        setMessage('এপিআই কী যাচাই করতে সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।');
+      }
     } finally {
       setIsValidating(false);
     }
   };
 
   const handleSave = () => {
-    localStorage.setItem('dapathshala_gemini_key', apiKey);
     validateKey(apiKey);
   };
 
