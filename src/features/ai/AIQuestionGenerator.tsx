@@ -19,13 +19,6 @@ export const AIQuestionGenerator: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSettings, setShowSettings] = useState(false);
-  const [manualApiKey, setManualApiKey] = useState(() => localStorage.getItem('dapathshala_gemini_key') || '');
-
-  const saveApiKey = (key: string) => {
-    setManualApiKey(key);
-    localStorage.setItem('dapathshala_gemini_key', key);
-  };
 
   const generateQuestions = async () => {
     if (!topic) return;
@@ -35,12 +28,13 @@ export const AIQuestionGenerator: React.FC = () => {
     setError(null);
     
     try {
+      const manualApiKey = localStorage.getItem('dapathshala_gemini_key') || '';
       const apiKey = (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY')
         ? process.env.GEMINI_API_KEY
         : manualApiKey;
 
       if (!apiKey) {
-        setError("এপিআই কী পাওয়া যায়নি। নিচের সেটিংস আইকনে ক্লিক করে কী সেট করুন।");
+        setError("এপিআই কী পাওয়া যায়নি। দয়া করে সেটিংস পেজে গিয়ে আপনার এপিআই কী সেট করুন।");
         setIsLoading(false);
         return;
       }
@@ -112,33 +106,12 @@ export const AIQuestionGenerator: React.FC = () => {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="space-y-6">
           <Card>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Settings2 size={18} />
-                কনফিগারেশন
-              </h2>
-              <button 
-                onClick={() => setShowSettings(!showSettings)}
-                className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 transition-colors"
-                title="সেটিংস"
-              >
-                <Settings2 size={16} className={showSettings ? 'text-emerald-600' : ''} />
-              </button>
-            </div>
+            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+              <Settings2 size={18} />
+              কনফিগারেশন
+            </h2>
 
             <div className="space-y-4">
-              {showSettings && (
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-2 animate-in fade-in slide-in-from-top-2">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">জেমিনি এপিআই কী</label>
-                  <input
-                    type="password"
-                    value={manualApiKey}
-                    onChange={(e) => saveApiKey(e.target.value)}
-                    placeholder="আপনার এপিআই কী দিন..."
-                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-900 focus:border-emerald-500 focus:outline-none"
-                  />
-                </div>
-              )}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">বিষয় বা টপিক</label>
                 <input
