@@ -28,14 +28,18 @@ export const AIQuestionGenerator: React.FC = () => {
     setError(null);
     
     try {
+      // Priority 1: System-wide Master Key (from Secrets/Environment)
+      // Priority 2: User's personal key (from LocalStorage)
+      const systemKey = process.env.GEMINI_API_KEY;
       const storedKey = localStorage.getItem('dapathshala_gemini_key') || '';
       const manualApiKey = storedKey.trim();
-      const apiKey = (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'MY_GEMINI_API_KEY')
-        ? process.env.GEMINI_API_KEY
+      
+      const apiKey = (systemKey && systemKey !== 'MY_GEMINI_API_KEY')
+        ? systemKey
         : manualApiKey;
 
       if (!apiKey) {
-        setError("এপিআই কী পাওয়া যায়নি। দয়া করে সেটিংস পেজে গিয়ে আপনার এপিআই কী সেট করুন।");
+        setError("এআই সার্ভিসটি বর্তমানে কনফিগার করা নেই। অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন অথবা সেটিংস থেকে আপনার নিজস্ব এপিআই কী সেট করুন।");
         setIsLoading(false);
         return;
       }
