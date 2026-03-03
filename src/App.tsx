@@ -22,7 +22,15 @@ export default function App() {
   const [showLanding, setShowLanding] = useState(true);
 
   if (showLanding) {
-    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
+    return (
+      <LandingPage 
+        onGetStarted={() => setShowLanding(false)} 
+        onFeatureClick={(tab) => {
+          setActiveTab(tab);
+          setShowLanding(false);
+        }}
+      />
+    );
   }
 
   const renderContent = () => {
