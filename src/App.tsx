@@ -49,7 +49,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
-      <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} isSidebarOpen={isSidebarOpen} />
+      <Navbar 
+        onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} 
+        onLogoClick={() => setShowLanding(true)}
+        isSidebarOpen={isSidebarOpen} 
+      />
       
       <div className="flex">
         <Sidebar activeTab={activeTab} setActiveTab={(tab) => {
