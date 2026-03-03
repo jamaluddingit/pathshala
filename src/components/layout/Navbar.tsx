@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
   onMenuClick: () => void;
+  onLogoClick?: () => void;
   isSidebarOpen: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, isSidebarOpen }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, onLogoClick, isSidebarOpen }) => {
   return (
     <nav className="sticky top-0 z-50 w-full border-bottom border-slate-100 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -18,10 +19,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, isSidebarOpen }) =>
           >
             {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <div className="flex items-center gap-2 text-emerald-600">
+          <button 
+            onClick={onLogoClick}
+            className="flex items-center gap-2 text-emerald-600 hover:opacity-80 transition-opacity focus:outline-none"
+          >
             <BookOpen size={28} strokeWidth={2.5} />
             <span className="text-xl font-bold tracking-tight text-slate-900">দ্য পাঠশালা</span>
-          </div>
+          </button>
         </div>
 
         <div className="flex items-center gap-4">
