@@ -162,6 +162,8 @@ export default function App() {
     return (
       <>
         <LandingPage 
+          user={user}
+          onDashboardClick={() => setShowLanding(false)}
           onGetStarted={() => openAuth('register')} 
           onFeatureClick={(tab) => openAuth('signin', tab)}
           onSignInClick={() => openAuth('signin')}
@@ -351,10 +353,7 @@ export default function App() {
               setActiveTab={setActiveTab} 
               user={user} 
               onLogout={handleLogout}
-              onGoToLanding={() => {
-                setActiveTab('home');
-                setShowLanding(false);
-              }}
+              onGoToLanding={() => setShowLanding(true)}
             />
             <main className="flex-1 lg:pl-64 pt-16 transition-all duration-300">
               <AnimatePresence mode="wait">
