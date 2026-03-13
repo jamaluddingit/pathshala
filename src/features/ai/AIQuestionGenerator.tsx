@@ -57,8 +57,8 @@ export const AIQuestionGenerator: React.FC = () => {
     try {
       const apiKey = process.env.GEMINI_API_KEY;
       
-      if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
-        setError("এআই সার্ভিসটি বর্তমানে কনফিগার করা নেই।");
+      if (!apiKey) {
+        setError("এআই সার্ভিসটি এই মুহূর্তে উপলব্ধ নেই। অনুগ্রহ করে পরে চেষ্টা করুন।");
         setIsLoading(false);
         return;
       }
