@@ -27,6 +27,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
     { id: 'parent', label: 'অভিভাবক', icon: <Users size={18} />, desc: 'সন্তান মনিটর' },
     { id: 'coaching_manager', label: 'কোচিং', icon: <Layout size={18} />, desc: 'ম্যানেজমেন্ট' },
     { id: 'university_candidate', label: 'বিশ্ববিদ্যালয়', icon: <Globe size={18} />, desc: 'এডমিশন' },
+    { id: 'departmental_examinee', label: 'বিভাগীয় পরীক্ষার্থী', icon: <BookOpen size={18} />, desc: 'বিভাগীয় পরীক্ষা' },
   ];
 
   const handleMagicLink = async () => {
@@ -135,34 +136,34 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-white/80 backdrop-blur-2xl border border-white/30 rounded-[2.5rem] shadow-2xl overflow-hidden"
+            className="relative w-full max-w-lg bg-white/90 backdrop-blur-2xl border border-white/30 rounded-[2rem] shadow-2xl overflow-hidden my-4"
           >
             {/* Close Button */}
             <button 
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-600 hover:bg-white/50 rounded-full transition-all z-10"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-white/50 rounded-full transition-all z-10"
             >
               <X size={20} />
             </button>
 
-            <div className="p-8 sm:p-10">
-              <div className="text-center mb-8">
+            <div className="p-6 sm:p-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
+              <div className="text-center mb-6">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="w-16 h-16 bg-emerald-500 rounded-2xl mx-auto mb-4 flex items-center justify-center text-white shadow-lg shadow-emerald-200"
+                  className="w-12 h-12 bg-emerald-500 rounded-xl mx-auto mb-3 flex items-center justify-center text-white shadow-lg shadow-emerald-200"
                 >
-                  <ShieldCheck size={32} />
+                  <ShieldCheck size={24} />
                 </motion.div>
-                <h2 className="text-3xl font-black text-slate-900">
+                <h2 className="text-2xl font-black text-slate-900">
                   {mode === 'signin' ? 'স্বাগতম!' : 'নতুন যাত্রা শুরু'}
                 </h2>
-                <p className="text-slate-500 mt-2">
+                <p className="text-slate-500 text-sm mt-1">
                   {mode === 'signin' ? 'আপনার অ্যাকাউন্টে লগইন করুন' : 'আজই জয়েন করুন DaPathshala-তে'}
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {mode === 'register' && (
                   <FloatingInput 
                     label="আপনার নাম" 
@@ -254,7 +255,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                 <Button 
                   variant="primary" 
                   type="submit"
-                  className="w-full py-4 text-lg rounded-2xl shadow-xl shadow-emerald-200 mt-4"
+                  className="w-full py-3.5 text-lg rounded-xl shadow-xl shadow-emerald-200 mt-2"
                   isLoading={isLoading}
                 >
                   {mode === 'signin' ? 'লগইন করুন' : 
@@ -283,29 +284,29 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
                 )}
               </form>
 
-              <div className="mt-8">
-                <div className="relative mb-8">
+              <div className="mt-6">
+                <div className="relative mb-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-200"></div>
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-white/80 backdrop-blur-md px-4 text-slate-400 font-bold">অথবা</span>
+                    <span className="bg-white/90 backdrop-blur-md px-4 text-slate-400 font-bold">অথবা</span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <button className="flex items-center justify-center gap-3 py-3 px-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-bold text-slate-700 text-sm">
-                    <Chrome size={18} className="text-red-500" />
+                <div className="grid grid-cols-2 gap-3">
+                  <button className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-bold text-slate-700 text-xs">
+                    <Chrome size={16} className="text-red-500" />
                     Google
                   </button>
-                  <button className="flex items-center justify-center gap-3 py-3 px-4 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-bold text-slate-700 text-sm">
-                    <Github size={18} className="text-slate-900" />
+                  <button className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all font-bold text-slate-700 text-xs">
+                    <Github size={16} className="text-slate-900" />
                     Github
                   </button>
                 </div>
               </div>
 
-              <div className="mt-8 text-center">
+              <div className="mt-6 text-center">
                 <button 
                   onClick={() => setMode(mode === 'signin' ? 'register' : 'signin')}
                   className="text-sm font-medium text-slate-500 hover:text-emerald-600 transition-colors"
