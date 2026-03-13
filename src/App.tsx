@@ -55,21 +55,27 @@ export default function App() {
     }
 
     // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        const userData: User = {
-          id: session.user.id,
-          name: session.user.user_metadata.name || 'ব্যবহারকারী',
-          email: session.user.email || '',
-          role: session.user.user_metadata.role || 'general_student',
-          avatar: session.user.user_metadata.avatar,
-          points: session.user.user_metadata.points || 0
-        };
-        setUser(userData);
-        setShowLanding(false);
-      }
+    if (supabase) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) {
+          const userData: User = {
+            id: session.user.id,
+            name: session.user.user_metadata.name || 'ব্যবহারকারী',
+            email: session.user.email || '',
+            role: session.user.user_metadata.role || 'general_student',
+            avatar: session.user.user_metadata.avatar,
+            points: session.user.user_metadata.points || 0
+          };
+          setUser(userData);
+          setShowLanding(false);
+        }
+        setIsLoading(false);
+      });
+    } else {
       setIsLoading(false);
-    });
+    }
+
+    if (!supabase) return;
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
@@ -122,7 +128,9 @@ export default function App() {
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setUser(null);
     setShowLanding(true);
     setIsAuthModalOpen(false);
