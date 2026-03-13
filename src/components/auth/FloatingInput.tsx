@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '../../lib/utils';
 
 interface FloatingInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -8,7 +8,11 @@ interface FloatingInputProps extends React.InputHTMLAttributes<HTMLInputElement>
 
 export const FloatingInput: React.FC<FloatingInputProps> = ({ label, icon, className, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const [hasValue, setHasValue] = useState(false);
+  const [hasValue, setHasValue] = useState(!!props.value || !!props.defaultValue);
+
+  useEffect(() => {
+    setHasValue(!!props.value || !!props.defaultValue);
+  }, [props.value, props.defaultValue]);
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     setIsFocused(false);
@@ -30,7 +34,7 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({ label, icon, class
     <div className="relative w-full group">
       <div className={cn(
         "absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-200 text-slate-400 group-focus-within:text-emerald-500",
-        (isFocused || hasValue) && "opacity-0"
+        (isFocused || hasValue) && "opacity-0 invisible"
       )}>
         {icon}
       </div>
@@ -40,8 +44,8 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({ label, icon, class
         onBlur={handleBlur}
         onChange={handleChange}
         className={cn(
-          "w-full bg-white/10 border border-white/20 rounded-2xl px-4 py-4 text-slate-900 outline-none transition-all duration-300",
-          "focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10",
+          "w-full bg-white border border-slate-200 rounded-2xl px-4 py-4 text-slate-900 outline-none transition-all duration-300",
+          "focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10",
           "placeholder:transparent",
           icon && "pl-12",
           className
@@ -53,7 +57,7 @@ export const FloatingInput: React.FC<FloatingInputProps> = ({ label, icon, class
           "absolute left-4 top-1/2 -translate-y-1/2 transition-all duration-300 pointer-events-none text-slate-500",
           icon && "left-12",
           (isFocused || hasValue) && cn(
-            "top-0 -translate-y-1/2 scale-90 px-2 bg-white/80 backdrop-blur-md rounded-md text-emerald-600 font-bold",
+            "top-0 -translate-y-1/2 scale-75 px-2 bg-white text-emerald-600 font-bold",
             icon && "left-4"
           )
         )}
