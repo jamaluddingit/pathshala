@@ -51,8 +51,8 @@ export const PDFReader: React.FC = () => {
 
     try {
       const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
-        throw new Error("এআই সার্ভিসটি বর্তমানে কনফিগার করা নেই।");
+      if (!apiKey) {
+        throw new Error("এআই সার্ভিসটি এই মুহূর্তে উপলব্ধ নেই।");
       }
 
       const ai = new GoogleGenAI({ apiKey });
