@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { Save, User, Camera, Mail, Code } from 'lucide-react';
+import { Save, User, Camera, Mail, Code, Database, CheckCircle2, XCircle, ExternalLink } from 'lucide-react';
 import { User as UserType } from '../../types';
+import { supabase } from '../../lib/supabase';
 
 interface SettingsProps {
   user: UserType | null;
@@ -11,12 +12,36 @@ interface SettingsProps {
 
 export const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser }) => {
   const [isDevMode, setIsDevMode] = useState(() => localStorage.getItem('dapathshala_dev_mode') === 'true');
+  const [supabaseStatus, setSupabaseStatus] = useState<'checking' | 'connected' | 'error'>('checking');
 
   // Profile state
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
   const [avatar, setAvatar] = useState(user?.avatar || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const checkSupabase = async () => {
+      if (!supabase) {
+        setSupabaseStatus('error');
+        return;
+      }
+      
+      try {
+        const { data, error } = await supabase.from('_test_connection').select('*').limit(1);
+        // Note: _test_connection might not exist, but we just want to see if the client can talk to the server
+        // If we get an error that isn't a network error, it usually means we are connected but the table doesn't exist
+        if (error && error.message.includes('FetchError')) {
+          setSupabaseStatus('error');
+        } else {
+          setSupabaseStatus('connected');
+        }
+      } catch (err) {
+        setSupabaseStatus('error');
+      }
+    };
+    checkSupabase();
+  }, []);
 
   const handleSaveProfile = () => {
     onUpdateUser({ name, email, avatar });
@@ -121,6 +146,65 @@ export const Settings: React.FC<SettingsProps> = ({ user, onUpdateUser }) => {
 
         {/* Other Settings */}
         <div className="space-y-8">
+          {/* Supabase Connection Status */}
+          <Card className="overflow-hidden">
+            <div className="border-b border-slate-100 bg-slate-50/50 px-6 py-4">
+              <h2 className="flex items-center gap-2 font-bold text-slate-900">
+                <Database size={18} className="text-emerald-600" />
+                সুপাবেজ কানেকশন
+              </h2>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg ${
+                    supabaseStatus === 'connected' ? 'bg-emerald-100 text-emerald-600' : 
+                    supabaseStatus === 'error' ? 'bg-red-100 text-red-600' : 
+                    'bg-slate-200 text-slate-400'
+                  }`}>
+                    <Database size={20} />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">কানেকশন স্ট্যাটাস</h3>
+                    <p className="text-xs text-slate-500">
+                      {supabaseStatus === 'connected' ? 'সফলভাবে কানেক্টেড' : 
+                       supabaseStatus === 'error' ? 'কানেকশন ত্রুটি' : 
+                       'যাচাই করা হচ্ছে...'}
+                    </p>
+                  </div>
+                </div>
+                {supabaseStatus === 'connected' ? (
+                  <CheckCircle2 className="text-emerald-500" size={24} />
+                ) : supabaseStatus === 'error' ? (
+                  <XCircle className="text-red-500" size={24} />
+                ) : (
+                  <div className="w-6 h-6 border-2 border-slate-300 border-t-emerald-500 rounded-full animate-spin" />
+                )}
+              </div>
+
+              {supabaseStatus === 'error' && (
+                <div className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-800 text-sm">
+                  <p className="font-bold mb-1">কনফিগারেশন প্রয়োজন!</p>
+                  <p className="opacity-90">
+                    দয়া করে অ্যাপ সেটিংস (Settings) থেকে <b>VITE_SUPABASE_URL</b> এবং <b>VITE_SUPABASE_ANON_KEY</b> এনভায়রনমেন্ট ভেরিয়েবলগুলো সেট করুন।
+                  </p>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                <a 
+                  href="https://supabase.com/dashboard" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all text-sm font-medium"
+                >
+                  <ExternalLink size={16} />
+                  সুপাবেজ ড্যাশবোর্ড
+                </a>
+              </div>
+            </div>
+          </Card>
+
           <Card className="overflow-hidden border-none shadow-xl bg-slate-900 text-white">
             <div className="p-6 space-y-4">
               <div className="flex items-center justify-between">
