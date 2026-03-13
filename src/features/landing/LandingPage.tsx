@@ -14,7 +14,11 @@ import {
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 
+import { User } from '../../types';
+
 interface LandingPageProps {
+  user?: User | null;
+  onDashboardClick?: () => void;
   onGetStarted: () => void;
   onFeatureClick: (tab: string) => void;
   onSignInClick: () => void;
@@ -22,6 +26,8 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ 
+  user,
+  onDashboardClick,
   onGetStarted, 
   onFeatureClick,
   onSignInClick,
@@ -46,18 +52,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <a href="#pricing" className="relative py-1 hover:text-emerald-600 transition-colors after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-emerald-600 after:transition-all hover:after:w-full">প্রাইসিং</a>
           </div>
           <div className="flex items-center gap-3">
-            <button 
-              onClick={onSignInClick}
-              className="hidden sm:block text-sm font-bold text-slate-600 hover:text-emerald-600 transition-colors px-4 py-2 relative after:absolute after:bottom-2 after:left-4 after:right-4 after:h-[2px] after:w-0 after:bg-emerald-600 after:transition-all hover:after:w-[calc(100%-2rem)]"
-            >
-              সাইন ইন
-            </button>
-            <Button variant="outline" size="sm" onClick={onRegisterClick} className="hidden sm:flex rounded-full px-6 border-emerald-600 text-emerald-600 hover:bg-emerald-50">
-              রেজিস্ট্রেশন
-            </Button>
-            <Button variant="primary" size="sm" onClick={onGetStarted} className="rounded-full px-6 shadow-lg shadow-emerald-200">
-              শুরু করুন
-            </Button>
+            {user ? (
+              <Button variant="primary" size="sm" onClick={onDashboardClick} className="rounded-full px-6 shadow-lg shadow-emerald-200">
+                ড্যাশবোর্ড
+              </Button>
+            ) : (
+              <>
+                <button 
+                  onClick={onSignInClick}
+                  className="hidden sm:block text-sm font-bold text-slate-600 hover:text-emerald-600 transition-colors px-4 py-2 relative after:absolute after:bottom-2 after:left-4 after:right-4 after:h-[2px] after:w-0 after:bg-emerald-600 after:transition-all hover:after:w-[calc(100%-2rem)]"
+                >
+                  সাইন ইন
+                </button>
+                <Button variant="outline" size="sm" onClick={onRegisterClick} className="hidden sm:flex rounded-full px-6 border-emerald-600 text-emerald-600 hover:bg-emerald-50">
+                  রেজিস্ট্রেশন
+                </Button>
+                <Button variant="primary" size="sm" onClick={onGetStarted} className="rounded-full px-6 shadow-lg shadow-emerald-200">
+                  শুরু করুন
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -87,13 +101,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               কোচিং ম্যানেজমেন্ট, এআই প্রশ্ন জেনারেটর এবং নোট শেয়ারিং - সবকিছু এক প্ল্যাটফর্মে। আপনার শিক্ষা প্রতিষ্ঠানকে নিয়ে যান এক অনন্য উচ্চতায়।
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button variant="primary" size="lg" onClick={onGetStarted} className="w-full sm:w-auto px-8 py-6 text-lg rounded-2xl shadow-xl shadow-emerald-200">
-                ফ্রি ট্রায়াল শুরু করুন
-                <ArrowRight className="ml-2" size={20} />
-              </Button>
-              <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-6 text-lg rounded-2xl">
-                ডেমো দেখুন
-              </Button>
+              {user ? (
+                <Button variant="primary" size="lg" onClick={onDashboardClick} className="w-full sm:w-auto px-10 py-6 text-lg rounded-2xl shadow-xl shadow-emerald-200">
+                  ড্যাশবোর্ডে ফিরে যান
+                  <ArrowRight className="ml-2" size={20} />
+                </Button>
+              ) : (
+                <>
+                  <Button variant="primary" size="lg" onClick={onGetStarted} className="w-full sm:w-auto px-8 py-6 text-lg rounded-2xl shadow-xl shadow-emerald-200">
+                    ফ্রি ট্রায়াল শুরু করুন
+                    <ArrowRight className="ml-2" size={20} />
+                  </Button>
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto px-8 py-6 text-lg rounded-2xl">
+                    ডেমো দেখুন
+                  </Button>
+                </>
+              )}
             </div>
           </motion.div>
 
@@ -193,10 +216,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <p className="text-slate-400 text-lg mb-10 max-w-xl mx-auto relative">
               আজই যোগ দিন দা পাঠশালা পরিবারে এবং আপনার শিক্ষা প্রতিষ্ঠানকে দিন এক নতুন মাত্রা।
             </p>
-            <Button variant="primary" size="lg" onClick={onGetStarted} className="px-10 py-6 text-lg rounded-2xl relative shadow-2xl shadow-emerald-500/20">
-              এখনি শুরু করুন
-              <ArrowRight className="ml-2" size={20} />
-            </Button>
+            {user ? (
+              <Button variant="primary" size="lg" onClick={onDashboardClick} className="px-10 py-6 text-lg rounded-2xl relative shadow-2xl shadow-emerald-500/20">
+                ড্যাশবোর্ডে ফিরে যান
+                <ArrowRight className="ml-2" size={20} />
+              </Button>
+            ) : (
+              <Button variant="primary" size="lg" onClick={onGetStarted} className="px-10 py-6 text-lg rounded-2xl relative shadow-2xl shadow-emerald-500/20">
+                এখনি শুরু করুন
+                <ArrowRight className="ml-2" size={20} />
+              </Button>
+            )}
           </div>
         </div>
       </section>
