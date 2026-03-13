@@ -30,6 +30,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
   ];
 
   const handleMagicLink = async () => {
+    if (!supabase) return alert('সুপাবেজ কনফিগার করা নেই।');
     if (!email) return alert('দয়া করে ইমেইল দিন');
     setIsLoading(true);
     try {
@@ -50,6 +51,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
   };
 
   const handleSendOTP = async () => {
+    if (!supabase) return alert('সুপাবেজ কনফিগার করা নেই।');
     if (!email) return alert('দয়া করে ইমেইল দিন');
     setIsLoading(true);
     try {
@@ -65,6 +67,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
 
   const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supabase) return alert('সুপাবেজ কনফিগার করা নেই।');
     setIsLoading(true);
     try {
       const { data, error } = await supabase.auth.verifyOtp({
@@ -84,6 +87,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onAuthSuc
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!supabase) return alert('সুপাবেজ কনফিগার করা নেই।');
     if (mode === 'otp') return handleVerifyOTP(e);
     
     setIsLoading(true);
