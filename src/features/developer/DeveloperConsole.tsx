@@ -30,6 +30,10 @@ export const DeveloperConsole: React.FC = () => {
   };
 
   const testSupabase = async () => {
+    if (!supabase) {
+      addLog('Supabase is not configured (VITE_SUPABASE_URL is missing)', 'error');
+      return;
+    }
     addLog('Testing Supabase connection...', 'info');
     const { data, error } = await supabase.auth.getSession();
     if (error) {
