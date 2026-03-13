@@ -55,14 +55,7 @@ export const AIQuestionGenerator: React.FC = () => {
     setError(null);
     
     try {
-      const apiKey = process.env.GEMINI_API_KEY;
-      
-      if (!apiKey) {
-        setError("এআই সার্ভিসটি এই মুহূর্তে উপলব্ধ নেই। অনুগ্রহ করে পরে চেষ্টা করুন।");
-        setIsLoading(false);
-        return;
-      }
-
+      const apiKey = process.env.GEMINI_API_KEY || '';
       const ai = new GoogleGenAI({ apiKey });
       const prompt = qType === 'mcq' 
         ? `Generate exactly ${count} multiple choice questions about "${topic}" for the subject "${subject}" in Bengali. 
