@@ -3,7 +3,7 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Save, User, Camera, Mail, Code, Database, CheckCircle2, XCircle, ExternalLink } from 'lucide-react';
 import { User as UserType } from '../../types';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '@/src/lib/supabase';
 
 interface SettingsProps {
   user: UserType | null;
