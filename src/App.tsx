@@ -158,6 +158,18 @@ export default function App() {
     }
   };
 
+  const roleLabels: Record<string, string> = {
+    general_student: 'শিক্ষার্থী',
+    madrasah_student: 'মাদ্রাসা শিক্ষার্থী',
+    guardian: 'অভিভাবক',
+    coaching_manager: 'কোচিং ম্যানেজার',
+    university_candidate: 'বিশ্ববিদ্যালয় পরীক্ষার্থী',
+    departmental_examinee: 'বিভাগীয় পরীক্ষার্থী',
+    admin: 'অ্যাডমিন',
+    parent: 'অভিভাবক',
+    child: 'শিক্ষার্থী'
+  };
+
   if (showLanding) {
     return (
       <>
@@ -192,6 +204,11 @@ export default function App() {
           <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8">
             <header className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase tracking-widest rounded-full border border-emerald-200">
+                    {user?.role ? roleLabels[user.role] : 'ব্যবহারকারী'}
+                  </span>
+                </div>
                 <h1 className="text-4xl font-black tracking-tight text-slate-900">
                   স্বাগতম, <span className="text-emerald-600">{user?.name || user?.email?.split('@')[0]}</span>!
                 </h1>
