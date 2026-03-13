@@ -350,7 +350,8 @@ export default function App() {
               activeTab={activeTab} 
               setActiveTab={setActiveTab} 
               user={user} 
-              onLogout={handleLogout} 
+              onLogout={handleLogout}
+              onGoToLanding={() => setShowLanding(true)}
             />
             <main className="flex-1 lg:pl-64 pt-16 transition-all duration-300">
               <AnimatePresence mode="wait">
@@ -378,7 +379,8 @@ export default function App() {
                 <motion.div 
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="inline-flex items-center justify-center w-20 h-20 bg-emerald-600 rounded-3xl shadow-2xl shadow-emerald-200 text-white text-4xl font-black italic mb-4"
+                  onClick={() => setShowLanding(false)}
+                  className="inline-flex items-center justify-center w-20 h-20 bg-emerald-600 rounded-3xl shadow-2xl shadow-emerald-200 text-white text-4xl font-black italic mb-4 cursor-pointer"
                 >
                   DP
                 </motion.div>
