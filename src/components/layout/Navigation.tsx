@@ -27,10 +27,19 @@ interface NavigationProps {
   setActiveTab: (tab: string) => void;
   user: User | null;
   onLogout: () => void;
+  onGoToLanding?: () => void;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, user, onLogout }) => {
+export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab, user, onLogout, onGoToLanding }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogoClick = () => {
+    if (onGoToLanding) {
+      onGoToLanding();
+    } else {
+      setActiveTab('home');
+    }
+  };
 
   const menuItems = [
     { id: 'home', label: 'হোম', icon: <Home size={20} />, category: 'Main' },
@@ -63,7 +72,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab,
           >
             <Menu size={24} />
           </button>
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('home')}>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
             <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-black italic">DP</div>
             <span className="text-xl font-black tracking-tighter text-slate-900 hidden sm:block">
               Da<span className="text-emerald-600">Pathshala</span>
@@ -168,7 +177,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab,
               className="fixed left-0 top-0 bottom-0 w-72 bg-white z-[201] lg:hidden flex flex-col p-6 shadow-2xl"
             >
               <div className="flex items-center justify-between mb-8">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => { handleLogoClick(); setIsOpen(false); }}>
                   <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-black italic">DP</div>
                   <span className="text-xl font-black tracking-tighter text-slate-900">DaPathshala</span>
                 </div>
