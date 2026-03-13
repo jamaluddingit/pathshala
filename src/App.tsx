@@ -109,7 +109,7 @@ export default function App() {
     });
 
     return () => subscription.unsubscribe();
-  }, [savedSession, user]);
+  }, [savedSession]);
 
   const handleAuthSuccess = (userData: any) => {
     setUser({
