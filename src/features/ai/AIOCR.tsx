@@ -40,11 +40,7 @@ export const AIOCR: React.FC = () => {
     setResult('');
 
     try {
-      const apiKey = process.env.GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error("এআই সার্ভিসটি এই মুহূর্তে উপলব্ধ নেই।");
-      }
-
+      const apiKey = process.env.GEMINI_API_KEY || '';
       const ai = new GoogleGenAI({ apiKey });
       
       // Convert base64 to parts for Gemini
